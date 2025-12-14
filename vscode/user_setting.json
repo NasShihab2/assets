@@ -35,13 +35,14 @@
         "debugConsole.warningForeground": "#CCA700",
         "debugConsole.errorForeground": "#F48771"
     },
-    "workbench.colorTheme": "Best Themes - Darcula",
     "explorer.confirmDragAndDrop": false,
     "window.zoomLevel": 0.7,
     "git.autofetch": true,
     "diffEditor.codeLens": true,
-    "editor.minimap.size": "fill",
     "editor.foldingStrategy": "auto",
     "editor.foldingImportsByDefault": true,
-    "editor.showFoldingControls": "always"
+    "editor.showFoldingControls": "always",
+    "workbench.colorTheme": "One Dark Pro Night Flat",
+    "editor.minimap.size": "fill",
+    "editor.minimap.maxColumn": 40
 }
