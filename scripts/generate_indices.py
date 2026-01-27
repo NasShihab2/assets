@@ -1,37 +1,57 @@
+import json
 import os
+import re
 
 
-def generate_markdown(directory, title, file_extensions, has_preview=True):
-    files = sorted([f for f in os.listdir(directory) if any(f.endswith(ext) for ext in file_extensions)])
-    if not files:
-        return
-
-    md_content = f"# {title}\n\nThis folder contains {title.lower()}.\n\n### 📦 Files\n\n"
-    
-    if has_preview:
-        md_content += "| Preview | Name | Link |\n| :---: | :--- | :--- |\n"
-        for f in files:
-            md_content += f"| <img src=\"{f}\" width=\"40\"> | {f} | [View]({f}) |\n"
-    else:
-        md_content += "| File Name | Link |\n| :--- | :--- |\n"
-        for f in files:
-            md_content += f"| **{f}** | [Download]({f}) |\n"
-
-    md_content += "\n[Back up to Repository Root](../README.md)\n"
-    
-    with open(os.path.join(directory, f"{directory}.md"), "w", encoding="utf-8") as f:
-        f.write(md_content)
-
-if __name__ == "__main__":
-    # Configure directories and their properties
+def scan_assets():
+    """Scans directories and returns a list of asset dictionaries."""
     configs = [
-        {"dir": "lottie", "title": "Lottie Animations", "ext": [".json"], "preview": False},
-        {"dir": "svg", "title": "SVG Icons", "ext": [".svg"], "preview": True},
-        {"dir": "images", "title": "Images", "ext": [".png", ".jpg", ".jpeg"], "preview": True},
-        {"dir": "gif", "title": "GIFs", "ext": [".gif"], "preview": True}
+        {"dir": "svg", "type": "svg", "ext": [".svg"]},
+        {"dir": "lottie", "type": "lottie", "ext": [".json"]},
+        {"dir": "images", "type": "image", "ext": [".png", ".jpg", ".jpeg"]},
+        {"dir": "gif", "type": "image", "ext": [".gif", ".jpg"]}
     ]
-
+    
+    all_assets = []
+    
     for config in configs:
         if os.path.exists(config["dir"]):
-            generate_markdown(config["dir"], config["title"], config["ext"], config["preview"])
-            print(f"Generated {config['dir']}/{config['dir']}.md")
+            files = sorted([f for f in os.listdir(config["dir"]) if any(f.endswith(ext) for ext in config["ext"])])
+            for f in files:
+                all_assets.append({
+                    "name": f,
+                    "type": config["type"],
+                    "path": f"{config['dir']}/{f}"
+                })
+    
+    return all_assets
+
+def update_index_html(assets):
+    """Updates the assets array in index.html using markers."""
+    index_path = "index.html"
+    if not os.path.exists(index_path):
+        print(f"Error: {index_path} not found.")
+        return
+
+    with open(index_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # Generate the JS array string
+    assets_js = "    const assets = " + json.dumps(assets, indent=2) + ";"
+    
+    # Replace the content between markers
+    marker_start = "/* @assets-start */"
+    marker_end = "/* @assets-end */"
+    
+    pattern = re.escape(marker_start) + r".*?" + re.escape(marker_end)
+    new_content = re.sub(pattern, f"{marker_start}\n{assets_js}\n    {marker_end}", content, flags=re.DOTALL)
+
+    with open(index_path, "w", encoding="utf-8") as f:
+        f.write(new_content)
+    
+    print(f"Successfully updated {index_path} with {len(assets)} assets.")
+
+if __name__ == "__main__":
+    print("Scanning for assets...")
+    assets = scan_assets()
+    update_index_html(assets)

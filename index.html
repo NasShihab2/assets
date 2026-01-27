@@ -466,32 +466,306 @@
   </div>
 
   <script>
+    /* @assets-start */
     const assets = [
-      // SVGs
-      ...[
-        'barcode.svg', 'beneficiary_registration.svg', 'briefcase.svg', 'briefcase_2.svg',
-        'calculator.svg', 'calender.svg', 'call.svg', 'camera.svg', 'captcha.svg',
-        'card.svg', 'card_activation.svg', 'card_delivery.svg', 'card_edit.svg',
-        'cardiology.svg', 'dermatology.svg', 'doc1.svg', 'duplicate.svg', 'eye.svg',
-        'face_scan.svg', 'finger_scan.svg', 'gender.svg', 'google_play.svg',
-        'info.svg', 'kidney_nephrology.svg', 'loading_a.svg', 'location.svg',
-        'login.svg', 'mail.svg', 'map_marker.svg', 'marital.svg', 'neurology.svg',
-        'notice.svg', 'notice_yellow.svg', 'orthopedic.svg', 'otp.svg',
-        'payment.svg', 'pdf.svg', 'pdf2.svg', 'play.svg', 'pos.svg', 'product.svg',
-        'profile.svg', 'qr.svg', 'search.svg', 'shop.svg', 'stop.svg',
-        'success.svg', 'warning.svg', 'whatsapp.svg', 'youtube.svg'
-      ].map(name => ({ name, type: 'svg', path: `svg/${name}` })),
+  {
+    "name": "barcode.svg",
+    "type": "svg",
+    "path": "svg/barcode.svg"
+  },
+  {
+    "name": "beneficiary_registration.svg",
+    "type": "svg",
+    "path": "svg/beneficiary_registration.svg"
+  },
+  {
+    "name": "briefcase.svg",
+    "type": "svg",
+    "path": "svg/briefcase.svg"
+  },
+  {
+    "name": "briefcase_2.svg",
+    "type": "svg",
+    "path": "svg/briefcase_2.svg"
+  },
+  {
+    "name": "calculator.svg",
+    "type": "svg",
+    "path": "svg/calculator.svg"
+  },
+  {
+    "name": "calender.svg",
+    "type": "svg",
+    "path": "svg/calender.svg"
+  },
+  {
+    "name": "call.svg",
+    "type": "svg",
+    "path": "svg/call.svg"
+  },
+  {
+    "name": "camera.svg",
+    "type": "svg",
+    "path": "svg/camera.svg"
+  },
+  {
+    "name": "captcha.svg",
+    "type": "svg",
+    "path": "svg/captcha.svg"
+  },
+  {
+    "name": "card.svg",
+    "type": "svg",
+    "path": "svg/card.svg"
+  },
+  {
+    "name": "card_activation.svg",
+    "type": "svg",
+    "path": "svg/card_activation.svg"
+  },
+  {
+    "name": "card_delivery.svg",
+    "type": "svg",
+    "path": "svg/card_delivery.svg"
+  },
+  {
+    "name": "card_edit.svg",
+    "type": "svg",
+    "path": "svg/card_edit.svg"
+  },
+  {
+    "name": "cardiology.svg",
+    "type": "svg",
+    "path": "svg/cardiology.svg"
+  },
+  {
+    "name": "dermatology.svg",
+    "type": "svg",
+    "path": "svg/dermatology.svg"
+  },
+  {
+    "name": "doc1.svg",
+    "type": "svg",
+    "path": "svg/doc1.svg"
+  },
+  {
+    "name": "duplicate.svg",
+    "type": "svg",
+    "path": "svg/duplicate.svg"
+  },
+  {
+    "name": "eye.svg",
+    "type": "svg",
+    "path": "svg/eye.svg"
+  },
+  {
+    "name": "face_scan.svg",
+    "type": "svg",
+    "path": "svg/face_scan.svg"
+  },
+  {
+    "name": "finger_scan.svg",
+    "type": "svg",
+    "path": "svg/finger_scan.svg"
+  },
+  {
+    "name": "gender.svg",
+    "type": "svg",
+    "path": "svg/gender.svg"
+  },
+  {
+    "name": "google_play.svg",
+    "type": "svg",
+    "path": "svg/google_play.svg"
+  },
+  {
+    "name": "info.svg",
+    "type": "svg",
+    "path": "svg/info.svg"
+  },
+  {
+    "name": "kidney_nephrology.svg",
+    "type": "svg",
+    "path": "svg/kidney_nephrology.svg"
+  },
+  {
+    "name": "loading_a.svg",
+    "type": "svg",
+    "path": "svg/loading_a.svg"
+  },
+  {
+    "name": "location.svg",
+    "type": "svg",
+    "path": "svg/location.svg"
+  },
+  {
+    "name": "login.svg",
+    "type": "svg",
+    "path": "svg/login.svg"
+  },
+  {
+    "name": "mail.svg",
+    "type": "svg",
+    "path": "svg/mail.svg"
+  },
+  {
+    "name": "map_marker.svg",
+    "type": "svg",
+    "path": "svg/map_marker.svg"
+  },
+  {
+    "name": "marital.svg",
+    "type": "svg",
+    "path": "svg/marital.svg"
+  },
+  {
+    "name": "neurology.svg",
+    "type": "svg",
+    "path": "svg/neurology.svg"
+  },
+  {
+    "name": "notice.svg",
+    "type": "svg",
+    "path": "svg/notice.svg"
+  },
+  {
+    "name": "notice_yellow.svg",
+    "type": "svg",
+    "path": "svg/notice_yellow.svg"
+  },
+  {
+    "name": "orthopedic.svg",
+    "type": "svg",
+    "path": "svg/orthopedic.svg"
+  },
+  {
+    "name": "otp.svg",
+    "type": "svg",
+    "path": "svg/otp.svg"
+  },
+  {
+    "name": "payment.svg",
+    "type": "svg",
+    "path": "svg/payment.svg"
+  },
+  {
+    "name": "pdf.svg",
+    "type": "svg",
+    "path": "svg/pdf.svg"
+  },
+  {
+    "name": "pdf2.svg",
+    "type": "svg",
+    "path": "svg/pdf2.svg"
+  },
+  {
+    "name": "play.svg",
+    "type": "svg",
+    "path": "svg/play.svg"
+  },
+  {
+    "name": "pos.svg",
+    "type": "svg",
+    "path": "svg/pos.svg"
+  },
+  {
+    "name": "product.svg",
+    "type": "svg",
+    "path": "svg/product.svg"
+  },
+  {
+    "name": "profile.svg",
+    "type": "svg",
+    "path": "svg/profile.svg"
+  },
+  {
+    "name": "qr.svg",
+    "type": "svg",
+    "path": "svg/qr.svg"
+  },
+  {
+    "name": "search.svg",
+    "type": "svg",
+    "path": "svg/search.svg"
+  },
+  {
+    "name": "shop.svg",
+    "type": "svg",
+    "path": "svg/shop.svg"
+  },
+  {
+    "name": "stop.svg",
+    "type": "svg",
+    "path": "svg/stop.svg"
+  },
+  {
+    "name": "success.svg",
+    "type": "svg",
+    "path": "svg/success.svg"
+  },
+  {
+    "name": "warning.svg",
+    "type": "svg",
+    "path": "svg/warning.svg"
+  },
+  {
+    "name": "whatsapp.svg",
+    "type": "svg",
+    "path": "svg/whatsapp.svg"
+  },
+  {
+    "name": "youtube.svg",
+    "type": "svg",
+    "path": "svg/youtube.svg"
+  },
+  {
+    "name": "check.json",
+    "type": "lottie",
+    "path": "lottie/check.json"
+  },
+  {
+    "name": "fallen_leaf.json",
+    "type": "lottie",
+    "path": "lottie/fallen_leaf.json"
+  },
+  {
+    "name": "info.json",
+    "type": "lottie",
+    "path": "lottie/info.json"
+  },
+  {
+    "name": "navigation.json",
+    "type": "lottie",
+    "path": "lottie/navigation.json"
+  },
+  {
+    "name": "selfie.json",
+    "type": "lottie",
+    "path": "lottie/selfie.json"
+  },
+  {
+    "name": "red_green.jpg",
+    "type": "image",
+    "path": "images/red_green.jpg"
+  },
+  {
+    "name": "tcb_logo_updated.png",
+    "type": "image",
+    "path": "images/tcb_logo_updated.png"
+  },
+  {
+    "name": "tarique.gif",
+    "type": "image",
+    "path": "gif/tarique.gif"
+  },
+  {
+    "name": "tarique.jpg",
+    "type": "image",
+    "path": "gif/tarique.jpg"
+  }
+];
+    /* @assets-end */
 
-      // Lottie
-      ...['check.json', 'fallen_leaf.json', 'info.json', 'navigation.json', 'selfie.json']
-        .map(name => ({ name, type: 'lottie', path: `lottie/${name}` })),
-
-      // Images/GIFs
-      { name: 'tarique.gif', type: 'image', path: 'gif/tarique.gif' },
-      { name: 'tarique.jpg', type: 'image', path: 'gif/tarique.jpg' },
-      { name: 'red_green.jpg', type: 'image', path: 'images/red_green.jpg' },
-      { name: 'tcb_logo_updated.png', type: 'image', path: 'images/tcb_logo_updated.png' }
-    ];
 
     const grid = document.getElementById('asset-grid');
     const searchInput = document.getElementById('search-input');
