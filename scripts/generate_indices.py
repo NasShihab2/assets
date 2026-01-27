@@ -10,7 +10,7 @@ def scan_assets():
         {"dir": "lottie", "type": "lottie", "ext": [".json"]},
         {"dir": "images", "type": "image", "ext": [".png", ".jpg", ".jpeg"]},
         {"dir": "gif", "type": "image", "ext": [".gif", ".jpg"]},
-        {"dir": "git_ssh_config", "type": "doc", "ext": [".md"]}
+        {"dir": "git_ssh_config", "type": "doc", "ext": [".md", ".html"]}
     ]
     
     all_assets = []
