@@ -969,27 +969,32 @@
           path: asset.path
         });
       } else if (asset.type === 'doc') {
-        modalPreview.innerHTML = '<div style="color: var(--text-secondary)">Loading guide...</div>';
-        if (asset.path.endsWith('.html')) {
-          modalPreview.innerHTML = `<iframe src="${asset.path}" style="width:100%; height:100%; border:none; border-radius: 1rem; background: var(--bg-color);"></iframe>`;
-        } else {
-          fetch(asset.path)
-            .then(res => res.text())
-            .then(text => {
-              modalPreview.innerHTML = `<div class="markdown-body">${marked.parse(text)}</div>`;
-            })
-            .catch(err => {
-              modalPreview.innerHTML = `<div style="color: #ef4444">Error loading documentation: ${err.message}</div>`;
-            });
-        }
-      } else {
+        modalPreview.innerHTML = '<div style="color: var(--text-secondary)">Loading document...</div>';
+        const iframe = document.createElement('iframe');
+        iframe.src = asset.path;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        iframe.style.background = 'white'; // Documentation usually looks better on white
+        iframe.style.borderRadius = '0.5rem';
 
+        modalPreview.innerHTML = '';
+        modalPreview.appendChild(iframe);
+
+        // Adjust modal styling for docs to be wider
+        document.querySelector('.modal-content').style.maxWidth = '1200px';
+        modalPreview.style.padding = '1rem';
+      } else {
         const img = document.createElement('img');
         img.src = asset.path;
         modalPreview.appendChild(img);
+        // Reset modal styling
+        document.querySelector('.modal-content').style.maxWidth = '900px';
+        modalPreview.style.padding = '3rem';
       }
 
     }
+
 
     closeModal.onclick = () => {
       modal.classList.remove('active');
