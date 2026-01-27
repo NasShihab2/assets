@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lottie Animation Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-color: #f8fafc;
+      --accent-color: #38bdf8;
+      --border-color: #334155;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      width: 100%;
+      padding: 2rem 0;
+      text-align: center;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent);
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      background: linear-gradient(to right, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      background-color: var(--card-bg);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    select,
+    button,
+    input {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    select:hover,
+    button:hover {
+      border-color: var(--accent-color);
+    }
+
+    button.active {
+      background-color: var(--accent-color);
+      color: var(--bg-color);
+      font-weight: 600;
+    }
+
+    .viewer-area {
+      width: 100%;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    #lottie-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .speed-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Lottie Player</h1>
+  </header>
+
+  <div class="container">
+    <div class="controls">
+      <select id="file-selector">
+        <option value="">Select an animation...</option>
+        <option value="check.json">check.json</option>
+        <option value="fallen_leaf.json">fallen_leaf.json</option>
+        <option value="info.json">info.json</option>
+        <option value="navigation.json">navigation.json</option>
+        <option value="selfie.json">selfie.json</option>
+      </select>
+
+      <button id="play-pause">Pause</button>
+      <button id="loop-toggle" class="active">Loop: On</button>
+
+      <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speed-slider" min="0.1" max="3" step="0.1" value="1">
+        <span id="speed-value">1.0x</span>
+      </div>
+    </div>
+
+    <div class="viewer-area">
+      <div id="lottie-container"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="lottie.md">← Back to Documentation</a>
+  </div>
+
+  <script>
+    const container = document.getElementById('lottie-container');
+    const fileSelector = document.getElementById('file-selector');
+    const playPauseBtn = document.getElementById('play-pause');
+    const loopBtn = document.getElementById('loop-toggle');
+    const speedSlider = document.getElementById('speed-slider');
+    const speedValue = document.getElementById('speed-value');
+
+    let animation = null;
+    let isLooping = true;
+
+    function loadLottie(filename) {
+      if (animation) {
+        animation.destroy();
+      }
+
+      if (!filename) {
+        container.innerHTML = '<div style="color: #64748b">Select an animation to begin</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      animation = lottie.loadAnimation({
+        container: container,
+        renderer: 'svg',
+        loop: isLooping,
+        autoplay: true,
+        path: filename
+      });
+
+      animation.addEventListener('DOMLoaded', () => {
+        animation.setSpeed(parseFloat(speedSlider.value));
+        playPauseBtn.textContent = 'Pause';
+      });
+    }
+
+    fileSelector.addEventListener('change', (e) => {
+      loadLottie(e.target.value);
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+      if (!animation) return;
+      if (animation.isPaused) {
+        animation.play();
+        playPauseBtn.textContent = 'Pause';
+      } else {
+        animation.pause();
+        playPauseBtn.textContent = 'Play';
+      }
+    });
+
+    loopBtn.addEventListener('click', () => {
+      isLooping = !isLooping;
+      loopBtn.classList.toggle('active', isLooping);
+      loopBtn.textContent = `Loop: ${isLooping ? 'On' : 'Off'}`;
+      if (animation) {
+        animation.loop = isLooping;
+      }
+    });
+
+    speedSlider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      speedValue.textContent = val.toFixed(1) + 'x';
+      if (animation) {
+        animation.setSpeed(val);
+      }
+    });
+
+    // Load the first one by default if selection persists or just wait for user
+    if (fileSelector.value) {
+      loadLottie(fileSelector.value);
+    } else {
+      container.innerHTML = '<div style="color: #64748b">Select an animation to begin</div>';
+    }
+  </script>
+</body>
+
+</html>

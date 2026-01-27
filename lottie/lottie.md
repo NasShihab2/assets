@@ -2,6 +2,10 @@
 
 This folder contains lottie animations.
 
+> [!TIP]
+> **View Animations:** You can preview these animations using the [Lottie Viewer](viewer.html).
+
+
 ### 📦 Files
 
 | File Name | Link |
