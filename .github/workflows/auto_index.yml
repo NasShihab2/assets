@@ -1,0 +1,32 @@
+name: Auto Index Assets
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lottie/**'
+      - 'svg/**'
+      - 'images/**'
+      - 'gif/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Generate Indices
+        run: python scripts/generate_indices.py
+        
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "docs: auto-update asset indices [skip ci]" && git push)

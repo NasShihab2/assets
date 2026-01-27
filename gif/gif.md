@@ -1,12 +1,11 @@
 # GIFs
 
-This folder contains GIF animation files.
+This folder contains gifs.
 
-### 🎞️ GIF Gallery
+### 📦 Files
 
 | Preview | Name | Link |
 | :---: | :--- | :--- |
-| ![tarique](tarique.gif) | tarique.gif | [View](tarique.gif) |
-| ![tarique_thumb](tarique.jpg) | tarique.jpg | [View](tarique.jpg) |
+| ![tarique.gif](tarique.gif) | tarique.gif | [View](tarique.gif) |
 
 [Back up to Repository Root](../README.md)

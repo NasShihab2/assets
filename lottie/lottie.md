@@ -1,8 +1,8 @@
 # Lottie Animations
 
-This folder contains Lottie animation JSON files.
+This folder contains lottie animations.
 
-### 🎥 Animations
+### 📦 Files
 
 | File Name | Link |
 | :--- | :--- |
