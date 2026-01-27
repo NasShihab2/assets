@@ -6,10 +6,10 @@ Welcome to the assets repository. Use the links below to navigate through the co
 
 | Category | Shortcut |
 | :--- | :--- |
-| **Lottie Animations** | [View Lottie](lottie/README.md) |
-| **SVG Icons** | [View SVGs](svg/README.md) |
-| **Images** | [View Images](images/README.md) |
-| **GIFs** | [View GIFs](gif/README.md) |
+| **Lottie Animations** | [View Lottie](lottie/lottie.md) |
+| **SVG Icons** | [View SVGs](svg/svg.md) |
+| **Images** | [View Images](images/images.md) |
+| **GIFs** | [View GIFs](gif/gif.md) |
 | **Documentation** | [Git SSH Config Notes](git_ssh_config/command_note.md) |
 
 ---
