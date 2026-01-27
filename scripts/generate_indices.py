@@ -11,7 +11,7 @@ def generate_markdown(directory, title, file_extensions, has_preview=True):
     if has_preview:
         md_content += "| Preview | Name | Link |\n| :---: | :--- | :--- |\n"
         for f in files:
-            md_content += f"| ![{f}]({f}) | {f} | [View]({f}) |\n"
+            md_content += f"| <img src=\"{f}\" width=\"40\"> | {f} | [View]({f}) |\n"
     else:
         md_content += "| File Name | Link |\n| :--- | :--- |\n"
         for f in files:

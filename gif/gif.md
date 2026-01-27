@@ -6,6 +6,6 @@ This folder contains gifs.
 
 | Preview | Name | Link |
 | :---: | :--- | :--- |
-| ![tarique.gif](tarique.gif) | tarique.gif | [View](tarique.gif) |
+| <img src="tarique.gif" width="40"> | tarique.gif | [View](tarique.gif) |
 
 [Back up to Repository Root](../README.md)

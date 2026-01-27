@@ -2,6 +2,9 @@
 
 Welcome to the assets repository. Use the links below to navigate through the collections:
 
+## Update Collectons
+py scripts/generate_indices.py
+
 ### 📁 Navigation
 
 | Category | Shortcut |

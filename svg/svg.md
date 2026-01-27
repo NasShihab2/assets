@@ -6,55 +6,55 @@ This folder contains svg icons.
 
 | Preview | Name | Link |
 | :---: | :--- | :--- |
-| ![barcode.svg](barcode.svg) | barcode.svg | [View](barcode.svg) |
-| ![beneficiary_registration.svg](beneficiary_registration.svg) | beneficiary_registration.svg | [View](beneficiary_registration.svg) |
-| ![briefcase.svg](briefcase.svg) | briefcase.svg | [View](briefcase.svg) |
-| ![briefcase_2.svg](briefcase_2.svg) | briefcase_2.svg | [View](briefcase_2.svg) |
-| ![calculator.svg](calculator.svg) | calculator.svg | [View](calculator.svg) |
-| ![calender.svg](calender.svg) | calender.svg | [View](calender.svg) |
-| ![call.svg](call.svg) | call.svg | [View](call.svg) |
-| ![camera.svg](camera.svg) | camera.svg | [View](camera.svg) |
-| ![captcha.svg](captcha.svg) | captcha.svg | [View](captcha.svg) |
-| ![card.svg](card.svg) | card.svg | [View](card.svg) |
-| ![card_activation.svg](card_activation.svg) | card_activation.svg | [View](card_activation.svg) |
-| ![card_delivery.svg](card_delivery.svg) | card_delivery.svg | [View](card_delivery.svg) |
-| ![card_edit.svg](card_edit.svg) | card_edit.svg | [View](card_edit.svg) |
-| ![cardiology.svg](cardiology.svg) | cardiology.svg | [View](cardiology.svg) |
-| ![dermatology.svg](dermatology.svg) | dermatology.svg | [View](dermatology.svg) |
-| ![doc1.svg](doc1.svg) | doc1.svg | [View](doc1.svg) |
-| ![duplicate.svg](duplicate.svg) | duplicate.svg | [View](duplicate.svg) |
-| ![eye.svg](eye.svg) | eye.svg | [View](eye.svg) |
-| ![face_scan.svg](face_scan.svg) | face_scan.svg | [View](face_scan.svg) |
-| ![finger_scan.svg](finger_scan.svg) | finger_scan.svg | [View](finger_scan.svg) |
-| ![gender.svg](gender.svg) | gender.svg | [View](gender.svg) |
-| ![google_play.svg](google_play.svg) | google_play.svg | [View](google_play.svg) |
-| ![info.svg](info.svg) | info.svg | [View](info.svg) |
-| ![kidney_nephrology.svg](kidney_nephrology.svg) | kidney_nephrology.svg | [View](kidney_nephrology.svg) |
-| ![loading_a.svg](loading_a.svg) | loading_a.svg | [View](loading_a.svg) |
-| ![location.svg](location.svg) | location.svg | [View](location.svg) |
-| ![login.svg](login.svg) | login.svg | [View](login.svg) |
-| ![mail.svg](mail.svg) | mail.svg | [View](mail.svg) |
-| ![map_marker.svg](map_marker.svg) | map_marker.svg | [View](map_marker.svg) |
-| ![marital.svg](marital.svg) | marital.svg | [View](marital.svg) |
-| ![neurology.svg](neurology.svg) | neurology.svg | [View](neurology.svg) |
-| ![notice.svg](notice.svg) | notice.svg | [View](notice.svg) |
-| ![notice_yellow.svg](notice_yellow.svg) | notice_yellow.svg | [View](notice_yellow.svg) |
-| ![orthopedic.svg](orthopedic.svg) | orthopedic.svg | [View](orthopedic.svg) |
-| ![otp.svg](otp.svg) | otp.svg | [View](otp.svg) |
-| ![payment.svg](payment.svg) | payment.svg | [View](payment.svg) |
-| ![pdf.svg](pdf.svg) | pdf.svg | [View](pdf.svg) |
-| ![pdf2.svg](pdf2.svg) | pdf2.svg | [View](pdf2.svg) |
-| ![play.svg](play.svg) | play.svg | [View](play.svg) |
-| ![pos.svg](pos.svg) | pos.svg | [View](pos.svg) |
-| ![product.svg](product.svg) | product.svg | [View](product.svg) |
-| ![profile.svg](profile.svg) | profile.svg | [View](profile.svg) |
-| ![qr.svg](qr.svg) | qr.svg | [View](qr.svg) |
-| ![search.svg](search.svg) | search.svg | [View](search.svg) |
-| ![shop.svg](shop.svg) | shop.svg | [View](shop.svg) |
-| ![stop.svg](stop.svg) | stop.svg | [View](stop.svg) |
-| ![success.svg](success.svg) | success.svg | [View](success.svg) |
-| ![warning.svg](warning.svg) | warning.svg | [View](warning.svg) |
-| ![whatsapp.svg](whatsapp.svg) | whatsapp.svg | [View](whatsapp.svg) |
-| ![youtube.svg](youtube.svg) | youtube.svg | [View](youtube.svg) |
+| <img src="barcode.svg" width="40"> | barcode.svg | [View](barcode.svg) |
+| <img src="beneficiary_registration.svg" width="40"> | beneficiary_registration.svg | [View](beneficiary_registration.svg) |
+| <img src="briefcase.svg" width="40"> | briefcase.svg | [View](briefcase.svg) |
+| <img src="briefcase_2.svg" width="40"> | briefcase_2.svg | [View](briefcase_2.svg) |
+| <img src="calculator.svg" width="40"> | calculator.svg | [View](calculator.svg) |
+| <img src="calender.svg" width="40"> | calender.svg | [View](calender.svg) |
+| <img src="call.svg" width="40"> | call.svg | [View](call.svg) |
+| <img src="camera.svg" width="40"> | camera.svg | [View](camera.svg) |
+| <img src="captcha.svg" width="40"> | captcha.svg | [View](captcha.svg) |
+| <img src="card.svg" width="40"> | card.svg | [View](card.svg) |
+| <img src="card_activation.svg" width="40"> | card_activation.svg | [View](card_activation.svg) |
+| <img src="card_delivery.svg" width="40"> | card_delivery.svg | [View](card_delivery.svg) |
+| <img src="card_edit.svg" width="40"> | card_edit.svg | [View](card_edit.svg) |
+| <img src="cardiology.svg" width="40"> | cardiology.svg | [View](cardiology.svg) |
+| <img src="dermatology.svg" width="40"> | dermatology.svg | [View](dermatology.svg) |
+| <img src="doc1.svg" width="40"> | doc1.svg | [View](doc1.svg) |
+| <img src="duplicate.svg" width="40"> | duplicate.svg | [View](duplicate.svg) |
+| <img src="eye.svg" width="40"> | eye.svg | [View](eye.svg) |
+| <img src="face_scan.svg" width="40"> | face_scan.svg | [View](face_scan.svg) |
+| <img src="finger_scan.svg" width="40"> | finger_scan.svg | [View](finger_scan.svg) |
+| <img src="gender.svg" width="40"> | gender.svg | [View](gender.svg) |
+| <img src="google_play.svg" width="40"> | google_play.svg | [View](google_play.svg) |
+| <img src="info.svg" width="40"> | info.svg | [View](info.svg) |
+| <img src="kidney_nephrology.svg" width="40"> | kidney_nephrology.svg | [View](kidney_nephrology.svg) |
+| <img src="loading_a.svg" width="40"> | loading_a.svg | [View](loading_a.svg) |
+| <img src="location.svg" width="40"> | location.svg | [View](location.svg) |
+| <img src="login.svg" width="40"> | login.svg | [View](login.svg) |
+| <img src="mail.svg" width="40"> | mail.svg | [View](mail.svg) |
+| <img src="map_marker.svg" width="40"> | map_marker.svg | [View](map_marker.svg) |
+| <img src="marital.svg" width="40"> | marital.svg | [View](marital.svg) |
+| <img src="neurology.svg" width="40"> | neurology.svg | [View](neurology.svg) |
+| <img src="notice.svg" width="40"> | notice.svg | [View](notice.svg) |
+| <img src="notice_yellow.svg" width="40"> | notice_yellow.svg | [View](notice_yellow.svg) |
+| <img src="orthopedic.svg" width="40"> | orthopedic.svg | [View](orthopedic.svg) |
+| <img src="otp.svg" width="40"> | otp.svg | [View](otp.svg) |
+| <img src="payment.svg" width="40"> | payment.svg | [View](payment.svg) |
+| <img src="pdf.svg" width="40"> | pdf.svg | [View](pdf.svg) |
+| <img src="pdf2.svg" width="40"> | pdf2.svg | [View](pdf2.svg) |
+| <img src="play.svg" width="40"> | play.svg | [View](play.svg) |
+| <img src="pos.svg" width="40"> | pos.svg | [View](pos.svg) |
+| <img src="product.svg" width="40"> | product.svg | [View](product.svg) |
+| <img src="profile.svg" width="40"> | profile.svg | [View](profile.svg) |
+| <img src="qr.svg" width="40"> | qr.svg | [View](qr.svg) |
+| <img src="search.svg" width="40"> | search.svg | [View](search.svg) |
+| <img src="shop.svg" width="40"> | shop.svg | [View](shop.svg) |
+| <img src="stop.svg" width="40"> | stop.svg | [View](stop.svg) |
+| <img src="success.svg" width="40"> | success.svg | [View](success.svg) |
+| <img src="warning.svg" width="40"> | warning.svg | [View](warning.svg) |
+| <img src="whatsapp.svg" width="40"> | whatsapp.svg | [View](whatsapp.svg) |
+| <img src="youtube.svg" width="40"> | youtube.svg | [View](youtube.svg) |
 
 [Back up to Repository Root](../README.md)

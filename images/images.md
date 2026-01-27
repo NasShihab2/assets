@@ -6,7 +6,7 @@ This folder contains images.
 
 | Preview | Name | Link |
 | :---: | :--- | :--- |
-| ![red_green.jpg](red_green.jpg) | red_green.jpg | [View](red_green.jpg) |
-| ![tcb_logo_updated.png](tcb_logo_updated.png) | tcb_logo_updated.png | [View](tcb_logo_updated.png) |
+| <img src="red_green.jpg" width="40"> | red_green.jpg | [View](red_green.jpg) |
+| <img src="tcb_logo_updated.png" width="40"> | tcb_logo_updated.png | [View](tcb_logo_updated.png) |
 
 [Back up to Repository Root](../README.md)
