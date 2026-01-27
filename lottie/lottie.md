@@ -5,6 +5,10 @@ This folder contains lottie animations.
 > [!TIP]
 > **View Animations:** You can preview these animations using the [Lottie Viewer](viewer.html).
 
+### 🎬 Gallery View
+<iframe src="gallery.html" width="100%" height="450px" style="border: 1px solid #334155; border-radius: 1rem; background: #0f172a;"></iframe>
+
+
 
 ### 📦 Files
 

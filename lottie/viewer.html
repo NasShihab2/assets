@@ -44,7 +44,6 @@
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-
     }
 
     .container {
@@ -238,8 +237,14 @@
       }
     });
 
-    // Load the first one by default if selection persists or just wait for user
-    if (fileSelector.value) {
+    // Check for URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileParam = urlParams.get('file');
+
+    if (fileParam) {
+      fileSelector.value = fileParam;
+      loadLottie(fileParam);
+    } else if (fileSelector.value) {
       loadLottie(fileSelector.value);
     } else {
       container.innerHTML = '<div style="color: #64748b">Select an animation to begin</div>';
