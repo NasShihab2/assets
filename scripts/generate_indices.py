@@ -11,7 +11,7 @@ def scan_assets():
         {"dir": "images", "type": "image", "ext": [".png", ".jpg", ".jpeg"]},
         {"dir": "gif", "type": "image", "ext": [".gif", ".jpg"]},
         {"dir": "document", "type": "doc", "ext": [".md", ".html"]},
-        {"dir": "dart", "type": "dart", "ext": [".dart"]}
+        {"dir": "dart", "type": "dart", "ext": [".dart", ".md", ".txt"]}
     ]
     
     all_assets = []
