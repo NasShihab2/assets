@@ -469,7 +469,17 @@
           <line x1="16" y1="17" x2="8" y2="17" />
           <polyline points="10 9 9 9 8 9" />
         </svg>
-        Documentation
+        Documents
+      </div>
+
+      <div class="nav-item" data-category="dart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
+        </svg>
+        Dart
       </div>
 
     </nav>
@@ -921,6 +931,11 @@
         "name": "ssh_git.html",
         "type": "doc",
         "path": "document/ssh_git.html"
+      },
+      {
+        "name": "text_box.dart",
+        "type": "dart",
+        "path": "dart/text_box.dart"
       }
     ];
     /* @assets-end */
@@ -986,17 +1001,21 @@
             path: asset.path
           });
           activeAnimations.push(anim);
-        } else if (asset.type === 'doc') {
+        } else if (asset.type === 'doc' || asset.type === 'dart') {
           preview.innerHTML = `
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-              <polyline points="10 9 9 9 8 9" />
-            </svg>
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 1rem; color: var(--accent);">
+              <div style="background: var(--accent-glow); padding: 1.5rem; border-radius: 1.5rem; border: 1px solid var(--accent);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  ${asset.type === 'dart'
+              ? '<path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />'
+              : '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />'}
+                </svg>
+              </div>
+              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">${asset.type}</span>
+            </div>
           `;
         }
+
 
 
         const info = document.createElement('div');
@@ -1064,18 +1083,35 @@
           autoplay: true,
           path: asset.path
         });
-      } else if (asset.type === 'doc') {
-        modalPreview.innerHTML = '<div style="color: var(--text-secondary)">Loading document...</div>';
-        const iframe = document.createElement('iframe');
-        iframe.src = asset.path;
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.border = 'none';
-        iframe.style.background = 'white'; // Documentation usually looks better on white
-        iframe.style.borderRadius = '0.5rem';
+      } else if (asset.type === 'doc' || asset.type === 'dart') {
+        modalPreview.innerHTML = '<div style="color: var(--text-secondary)">Loading content...</div>';
 
-        modalPreview.innerHTML = '';
-        modalPreview.appendChild(iframe);
+        if (asset.path.endsWith('.html')) {
+          const iframe = document.createElement('iframe');
+          iframe.src = asset.path;
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.style.border = 'none';
+          iframe.style.background = 'white';
+          iframe.style.borderRadius = '0.5rem';
+          modalPreview.innerHTML = '';
+          modalPreview.appendChild(iframe);
+        } else {
+          // For .md or .dart files
+          fetch(asset.path)
+            .then(res => res.text())
+            .then(text => {
+              let content = text;
+              if (asset.path.endsWith('.dart')) {
+                content = `\`\`\`dart\n${text}\n\`\`\``;
+              }
+              modalPreview.innerHTML = `<div class="markdown-body" style="padding: 2rem; background: #0c111d; border-radius: 0.5rem; overflow-y: auto; height: 100%; border: 1px solid var(--border);">${marked.parse(content)}</div>`;
+            })
+            .catch(err => {
+              modalPreview.innerHTML = `<div style="color: #ef4444">Error loading content: ${err.message}</div>`;
+            });
+        }
+
 
         // Adjust modal styling for docs to be wider and taller
         const content = document.querySelector('.modal-content');
@@ -1087,6 +1123,7 @@
         const fullViewBtn = document.getElementById('modal-full-view');
         fullViewBtn.style.display = 'block';
         fullViewBtn.href = asset.path;
+
       } else {
         const img = document.createElement('img');
         img.src = asset.path;
