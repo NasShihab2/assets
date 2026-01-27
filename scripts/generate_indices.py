@@ -9,13 +9,15 @@ def scan_assets():
         {"dir": "svg", "type": "svg", "ext": [".svg"]},
         {"dir": "lottie", "type": "lottie", "ext": [".json"]},
         {"dir": "images", "type": "image", "ext": [".png", ".jpg", ".jpeg"]},
-        {"dir": "gif", "type": "image", "ext": [".gif", ".jpg"]}
+        {"dir": "gif", "type": "image", "ext": [".gif", ".jpg"]},
+        {"dir": "git_ssh_config", "type": "doc", "ext": [".md"]}
     ]
     
     all_assets = []
     
     for config in configs:
         if os.path.exists(config["dir"]):
+            # Filter files by extension
             files = sorted([f for f in os.listdir(config["dir"]) if any(f.endswith(ext) for ext in config["ext"])])
             for f in files:
                 all_assets.append({

@@ -7,10 +7,12 @@
   <title>Asset Hub</title>
   <!-- Google Fonts -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
   <!-- Lottie Web -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  <!-- marked.js for Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     :root {
       --bg-color: #020617;
@@ -23,6 +25,55 @@
       --border: #334155;
       --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+    /* Markdown Styles */
+    .markdown-body {
+      color: var(--text-primary);
+      line-height: 1.6;
+      width: 100%;
+      text-align: left;
+    }
+
+    .markdown-body h1,
+    .markdown-body h2,
+    .markdown-body h3 {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.3rem;
+      margin-top: 1.5rem;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .markdown-body pre {
+      background: #000;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      margin: 1rem 0;
+    }
+
+    .markdown-body code {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.9em;
+    }
+
+    .markdown-body pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .markdown-body blockquote {
+      border-left: 4px solid var(--accent);
+      margin: 1rem 0;
+      padding-left: 1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+
 
     * {
       box-sizing: border-box;
@@ -409,6 +460,18 @@
         </svg>
         Images & GIFs
       </div>
+      <div class="nav-item" data-category="doc">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        Documentation
+      </div>
+
     </nav>
   </aside>
 
@@ -757,6 +820,11 @@
     "name": "tarique.jpg",
     "type": "image",
     "path": "gif/tarique.jpg"
+  },
+  {
+    "name": "command_note.md",
+    "type": "doc",
+    "path": "git_ssh_config/command_note.md"
   }
 ];
     /* @assets-end */
@@ -822,7 +890,18 @@
             path: asset.path
           });
           activeAnimations.push(anim);
+        } else if (asset.type === 'doc') {
+          preview.innerHTML = `
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+          `;
         }
+
 
         const info = document.createElement('div');
         info.className = 'asset-info';
@@ -889,11 +968,27 @@
           autoplay: true,
           path: asset.path
         });
+      } else if (asset.type === 'doc') {
+        modalPreview.innerHTML = '<div style="color: var(--text-secondary)">Loading guide...</div>';
+        if (asset.path.endsWith('.html')) {
+          modalPreview.innerHTML = `<iframe src="${asset.path}" style="width:100%; height:100%; border:none; border-radius: 1rem; background: var(--bg-color);"></iframe>`;
+        } else {
+          fetch(asset.path)
+            .then(res => res.text())
+            .then(text => {
+              modalPreview.innerHTML = `<div class="markdown-body">${marked.parse(text)}</div>`;
+            })
+            .catch(err => {
+              modalPreview.innerHTML = `<div style="color: #ef4444">Error loading documentation: ${err.message}</div>`;
+            });
+        }
       } else {
+
         const img = document.createElement('img');
         img.src = asset.path;
         modalPreview.appendChild(img);
       }
+
     }
 
     closeModal.onclick = () => {

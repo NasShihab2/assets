@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Account SSH Configuration Guide</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #020617;
+      --surface: #0f172a;
+      --surface-accent: #1e293b;
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.2);
+      --text-main: #f8fafc;
+      --text-dim: #94a3b8;
+      --border: #334155;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      z-index: 100;
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+    }
+
+    header {
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 1rem;
+      background: var(--primary-glow);
+      color: var(--primary);
+      border-radius: 99px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 0;
+      background: linear-gradient(to right, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      position: relative;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .step-num {
+      background: var(--primary);
+      color: var(--bg);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    p {
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+    }
+
+    .code-block {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      word-break: break-all;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: var(--surface-accent);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 0.4rem 0.75rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: var(--primary-glow);
+    }
+
+    .note {
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 4px solid var(--primary);
+      padding: 1.25rem;
+      border-radius: 0.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .note strong {
+      color: var(--primary);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="../index.html" class="back-link">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+    Back to Hub
+  </a>
+
+  <div class="container">
+    <header>
+      <span class="badge">Technical Guide</span>
+      <h1>Multi-Account SSH</h1>
+      <p>A step-by-step guide to managing multiple GitHub accounts on a single machine using SSH keys.</p>
+    </header>
+
+    <section id="step1">
+      <h2>
+        <div class="step-num">1</div> Generate Key for First Account
+      </h2>
+      <p>Run this command to generate your primary SSH key. Replace the email with your first GitHub account email.</p>
+      <div class="code-block">
+        <code id="cmd1">ssh-keygen -t ed25519 -C "your_email@example.com" -f C:\Users\Admin\.ssh\id_ed25519</code>
+        <button class="copy-btn" onclick="copyText('cmd1')">Copy</button>
+      </div>
+      <div class="note">Press <strong>Enter</strong> for defaults. Adding a passphrase is optional but recommended.
+      </div>
+    </section>
+
+    <section id="step2">
+      <h2>
+        <div class="step-num">2</div> Add First Key to GitHub
+      </h2>
+      <p>Open the public key file and copy the content to your GitHub settings.</p>
+      <div class="code-block">
+        <code id="cmd2">notepad C:\Users\Admin\.ssh\id_ed25519.pub</code>
+        <button class="copy-btn" onclick="copyText('cmd2')">Copy</button>
+      </div>
+      <div class="note">Go to <strong>Settings → SSH and GPG keys → New SSH key</strong> and paste the content.</div>
+    </section>
+
+    <section id="step3">
+      <h2>
+        <div class="step-num">3</div> Generate Key for Second Account
+      </h2>
+      <p>Generate a separate key with a different filename for your secondary account.</p>
+      <div class="code-block">
+        <code
+          id="cmd3">ssh-keygen -t ed25519 -C "second_email@example.com" -f C:\Users\Admin\.ssh\id_ed25519_second</code>
+        <button class="copy-btn" onclick="copyText('cmd3')">Copy</button>
+      </div>
+    </section>
+
+    <section id="step4">
+      <h2>
+        <div class="step-num">4</div> Add Second Key to GitHub
+      </h2>
+      <p>Repeat the process for your second GitHub account using the second public key.</p>
+      <div class="code-block">
+        <code id="cmd4">notepad C:\Users\Admin\.ssh\id_ed25519_second.pub</code>
+        <button class="copy-btn" onclick="copyText('cmd4')">Copy</button>
+      </div>
+    </section>
+
+    <section id="step5">
+      <h2>
+        <div class="step-num">5</div> Configure SSH Config File
+      </h2>
+      <p>Now, create or edit the SSH config file to tell SSH which key to use for which host.</p>
+      <div class="code-block">
+        <code id="cmd5">notepad C:\Users\Admin\.ssh\config</code>
+        <button class="copy-btn" onclick="copyText('cmd5')">Copy</button>
+      </div>
+      <p style="margin-top: 1.5rem;">Paste the following configuration:</p>
+      <div class="code-block">
+        <pre style="margin:0"><code id="config-content"># First GitHub account
+Host github.com-first
+    HostName github.com
+    User git
+    IdentityFile C:\Users\Admin\.ssh\id_ed25519
+
+# Second GitHub account
+Host github.com-second
+    HostName github.com
+    User git
+    IdentityFile C:\Users\Admin\.ssh\id_ed25519_second</code></pre>
+        <button class="copy-btn" onclick="copyText('config-content')">Copy</button>
+      </div>
+    </section>
+
+    <section id="step6">
+      <h2>
+        <div class="step-num">6</div> Test Connections
+      </h2>
+      <p>Verify that both accounts are successfully authenticated.</p>
+      <div class="code-block">
+        <code id="cmd6">ssh -T git@github.com-first
+ssh -T git@github.com-second</code>
+        <button class="copy-btn" onclick="copyText('cmd6')">Copy</button>
+      </div>
+      <div class="note">Successful auth returns: <strong>"Hi username! You've successfully authenticated..."</strong>
+      </div>
+    </section>
+
+    <section id="step7">
+      <h2>
+        <div class="step-num">7</div> Clone or Update Repos
+      </h2>
+      <p>When cloning or setting remotes, use the <strong>custom hostnames</strong> defined in your config.</p>
+      <div class="code-block">
+        <code id="cmd7"># Clone with first account
+git clone git@github.com-first:username/repo.git
+
+# Clone with second account
+git clone git@github.com-second:username/repo.git</code>
+        <button class="copy-btn" onclick="copyText('cmd7')">Copy</button>
+      </div>
+    </section>
+
+    <section id="step8">
+      <h2>
+        <div class="step-num">8</div> Force SSH Globally (Optional)
+      </h2>
+      <p>Automatically redirect all HTTPS clones to SSH to avoid credential manager issues.</p>
+      <div class="code-block">
+        <code id="cmd8">git config --global url."git@github.com:".insteadOf "https://github.com/"</code>
+        <button class="copy-btn" onclick="copyText('cmd8')">Copy</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function copyText(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const original = btn.innerText;
+        btn.innerText = 'Copied!';
+        btn.style.color = 'var(--success)';
+        btn.style.borderColor = 'var(--success)';
+        setTimeout(() => {
+          btn.innerText = original;
+          btn.style.color = '';
+          btn.style.borderColor = '';
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+
+</html>
