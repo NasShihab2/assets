@@ -8,6 +8,8 @@ This folder contains svg icons.
 | :---: | :--- | :--- |
 | ![barcode.svg](barcode.svg) | barcode.svg | [View](barcode.svg) |
 | ![beneficiary_registration.svg](beneficiary_registration.svg) | beneficiary_registration.svg | [View](beneficiary_registration.svg) |
+| ![briefcase.svg](briefcase.svg) | briefcase.svg | [View](briefcase.svg) |
+| ![briefcase_2.svg](briefcase_2.svg) | briefcase_2.svg | [View](briefcase_2.svg) |
 | ![calculator.svg](calculator.svg) | calculator.svg | [View](calculator.svg) |
 | ![calender.svg](calender.svg) | calender.svg | [View](calender.svg) |
 | ![call.svg](call.svg) | call.svg | [View](call.svg) |
