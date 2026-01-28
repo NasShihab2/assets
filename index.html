@@ -606,6 +606,15 @@
         </svg>
         Images & GIFs
       </div>
+      <div class="nav-item" data-category="font">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 7V4h16v3" />
+          <path d="M9 20h6" />
+          <path d="M12 4v16" />
+        </svg>
+        Fonts
+      </div>
       <div class="nav-item" data-category="doc">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
@@ -1167,6 +1176,46 @@
     "name": "text_box.md",
     "type": "dart",
     "path": "dart/text_box.md"
+  },
+  {
+    "name": "Krishnochura_Unicode.ttf",
+    "type": "font",
+    "path": "fonts/Krishnochura_Unicode.ttf"
+  },
+  {
+    "name": "Lato-Black.ttf",
+    "type": "font",
+    "path": "fonts/Lato-Black.ttf"
+  },
+  {
+    "name": "Lato-Bold.ttf",
+    "type": "font",
+    "path": "fonts/Lato-Bold.ttf"
+  },
+  {
+    "name": "Lato-Light.ttf",
+    "type": "font",
+    "path": "fonts/Lato-Light.ttf"
+  },
+  {
+    "name": "Lato-Regular.ttf",
+    "type": "font",
+    "path": "fonts/Lato-Regular.ttf"
+  },
+  {
+    "name": "Nikosh.ttf",
+    "type": "font",
+    "path": "fonts/Nikosh.ttf"
+  },
+  {
+    "name": "Siyam_Rupali_ANSI.ttf",
+    "type": "font",
+    "path": "fonts/Siyam_Rupali_ANSI.ttf"
+  },
+  {
+    "name": "roboto.ttf",
+    "type": "font",
+    "path": "fonts/roboto.ttf"
   }
 ];
     /* @assets-end */
@@ -1245,6 +1294,25 @@
                 </svg>
               </div>
               <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">${asset.type}</span>
+            </div>
+          `;
+        } else if (asset.type === 'font') {
+          const fontName = `font-${index}`;
+          const fontStyle = document.createElement('style');
+          fontStyle.textContent = `
+            @font-face {
+              font-family: '${fontName}';
+              src: url('${asset.path}');
+            }
+          `;
+          document.head.appendChild(fontStyle);
+
+          preview.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; text-align: center; padding: 1rem;">
+              <div style="font-family: '${fontName}'; font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%;">
+                Aa
+              </div>
+              <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase;">Abc 123</span>
             </div>
           `;
         }
@@ -1357,7 +1425,7 @@
         fullViewBtn.style.display = 'block';
         fullViewBtn.href = asset.path;
 
-      } else {
+      } else if (asset.type === 'image' || asset.type === 'svg') {
         const img = document.createElement('img');
         img.src = asset.path;
         modalPreview.appendChild(img);
@@ -1367,6 +1435,42 @@
         content.style.maxWidth = '900px';
         content.style.height = 'auto';
         modalPreview.style.padding = '3rem';
+
+        // Hide Full Page View button
+        document.getElementById('modal-full-view').style.display = 'none';
+      } else if (asset.type === 'font') {
+        const fontName = `modal-font-${Date.now()}`;
+        const fontStyle = document.createElement('style');
+        fontStyle.textContent = `
+          @font-face {
+            font-family: '${fontName}';
+            src: url('${asset.path}');
+          }
+        `;
+        document.head.appendChild(fontStyle);
+
+        modalPreview.innerHTML = `
+          <div style="width: 100%; padding: 2rem; color: var(--text-primary); text-align: left;">
+            <div style="font-family: '${fontName}'; font-size: 4rem; line-height: 1.2; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+              The quick brown fox jumps over the lazy dog.
+            </div>
+            <div style="font-family: '${fontName}'; font-size: 2rem; margin-bottom: 1rem; color: var(--text-secondary);">
+              ABCDEFGHIJKLMNOPQRSTUVWXYZ
+            </div>
+            <div style="font-family: '${fontName}'; font-size: 2rem; margin-bottom: 1rem; color: var(--text-secondary);">
+              abcdefghijklmnopqrstuvwxyz
+            </div>
+            <div style="font-family: '${fontName}'; font-size: 2rem; color: var(--text-secondary);">
+              0123456789 !@#$%^&*()
+            </div>
+          </div>
+        `;
+
+        // Reset modal styling
+        const content = document.querySelector('.modal-content');
+        content.style.maxWidth = '900px';
+        content.style.height = 'auto';
+        modalPreview.style.padding = '1rem';
 
         // Hide Full Page View button
         document.getElementById('modal-full-view').style.display = 'none';
