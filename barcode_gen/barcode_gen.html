@@ -232,7 +232,7 @@
   <body>
     <div class="container">
       <header>
-        <h1>Barcode Gen</h1>
+        <h1>Barcode Generator</h1>
         <p class="subtitle">Generate high-quality barcodes for GitHub Pages</p>
       </header>
 
@@ -265,6 +265,11 @@
         <div class="input-group" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
           <input type="checkbox" id="transparentBg" checked style="width: auto; cursor: pointer;" />
           <label for="transparentBg" style="margin-bottom: 0; cursor: pointer; text-transform: none; letter-spacing: normal;">Transparent Background</label>
+        </div>
+
+        <div class="input-group" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+          <input type="checkbox" id="displayText" checked style="width: auto; cursor: pointer;" />
+          <label for="displayText" style="margin-bottom: 0; cursor: pointer; text-transform: none; letter-spacing: normal;">Show Text under Barcode</label>
         </div>
 
         <div class="preview-area" id="previewArea">
@@ -303,6 +308,7 @@
       const input = document.getElementById("barcodeValue");
       const typeSelect = document.getElementById("barcodeType");
       const transparentBg = document.getElementById("transparentBg");
+      const displayText = document.getElementById("displayText");
       const downloadBtn = document.getElementById("downloadBtn");
       const hiddenCanvas = document.getElementById("hiddenCanvas");
 
@@ -326,6 +332,7 @@
         const value = input.value || "";
         const format = typeSelect.value;
         const isTransparent = transparentBg.checked;
+        const showText = displayText.checked;
         const errorEl = document.getElementById("errorMessage");
         const svgEl = document.getElementById("barcode");
 
@@ -341,7 +348,7 @@
             lineColor: "#000",
             width: 2,
             height: 100,
-            displayValue: true,
+            displayValue: showText,
             fontSize: 16,
             font: "JetBrains Mono",
             background: isTransparent ? "transparent" : "#ffffff",
@@ -362,6 +369,7 @@
         generate();
       });
       transparentBg.addEventListener("change", generate);
+      displayText.addEventListener("change", generate);
 
       downloadBtn.addEventListener("click", () => {
         const svg = document.getElementById("barcode");
