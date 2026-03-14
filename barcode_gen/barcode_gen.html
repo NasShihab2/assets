@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Premium Barcode Generator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <!-- JsBarcode Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+      :root {
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --bg: #0f172a;
+        --card-bg: rgba(30, 41, 59, 0.7);
+        --text: #f8fafc;
+        --text-muted: #94a3b8;
+        --glass-border: rgba(255, 255, 255, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(
+            at 0% 0%,
+            rgba(99, 102, 241, 0.15) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 0%,
+            rgba(168, 85, 247, 0.15) 0px,
+            transparent 50%
+          );
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 600px;
+        width: 100%;
+        z-index: 1;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeInDown 0.8s ease-out;
+      }
+
+      h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(to right, #818cf8, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p.subtitle {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+      }
+
+      .card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+      }
+
+      .input-group {
+        margin-bottom: 2rem;
+      }
+
+      label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      input,
+      select {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        color: var(--text);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+      }
+
+      .preview-area {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .preview-area:hover {
+        transform: scale(1.02);
+      }
+
+      #barcode {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      button:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      footer {
+        margin-top: auto;
+        padding: 2rem;
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        text-align: center;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Barcode Gen</h1>
+        <p class="subtitle">Generate high-quality barcodes for GitHub Pages</p>
+      </header>
+
+      <main class="card">
+        <div class="input-group">
+          <label for="barcodeValue">Barcode Value</label>
+          <input
+            type="text"
+            id="barcodeValue"
+            placeholder="Enter text or numbers..."
+            autocomplete="off"
+            value="123456789"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="barcodeType">Format</label>
+          <select id="barcodeType">
+            <option value="CODE128">CODE128 (Standard)</option>
+            <option value="EAN13">EAN13</option>
+            <option value="UPC">UPC</option>
+            <option value="CODE39">CODE39</option>
+            <option value="ITF14">ITF14</option>
+            <option value="MSI">MSI</option>
+            <option value="pharmacode">Pharmacode</option>
+          </select>
+        </div>
+
+        <div class="preview-area">
+          <svg id="barcode"></svg>
+        </div>
+
+        <div class="actions">
+          <button id="downloadBtn">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              ></path>
+            </svg>
+            Download PNG (Transparent)
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 Barcode Generator &bull; Powered by JsBarcode</p>
+    </footer>
+
+    <canvas id="hiddenCanvas" style="display: none"></canvas>
+
+    <script>
+      const input = document.getElementById("barcodeValue");
+      const typeSelect = document.getElementById("barcodeType");
+      const downloadBtn = document.getElementById("downloadBtn");
+      const hiddenCanvas = document.getElementById("hiddenCanvas");
+
+      function generate() {
+        const value = input.value || " ";
+        const format = typeSelect.value;
+
+        try {
+          JsBarcode("#barcode", value, {
+            format: format,
+            lineColor: "#000",
+            width: 2,
+            height: 100,
+            displayValue: true,
+            fontSize: 16,
+            font: "JetBrains Mono",
+            background: "transparent",
+          });
+        } catch (e) {
+          console.error("Barcode generation failed", e);
+        }
+      }
+
+      input.addEventListener("input", generate);
+      typeSelect.addEventListener("change", generate);
+
+      downloadBtn.addEventListener("click", () => {
+        const svg = document.getElementById("barcode");
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const canvas = hiddenCanvas;
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        // Get SVG dimensions
+        const svgSize = svg.getBoundingClientRect();
+        canvas.width = svgSize.width * 2; // Higher resolution
+        canvas.height = svgSize.height * 2;
+
+        const svgBlob = new Blob([svgData], {
+          type: "image/svg+xml;charset=utf-8",
+        });
+        const url = URL.createObjectURL(svgBlob);
+
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          const pngUrl = canvas.toDataURL("image/png");
+          const downloadLink = document.createElement("a");
+          downloadLink.href = pngUrl;
+          downloadLink.download = `barcode-${input.value || "export"}.png`;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+          URL.revokeObjectURL(url);
+        };
+
+        img.src = url;
+      });
+
+      // Initial generation
+      window.addEventListener("load", generate);
+    </script>
+  </body>
+</html>
