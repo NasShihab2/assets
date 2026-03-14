@@ -261,6 +261,11 @@
           </select>
         </div>
 
+        <div class="input-group" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+          <input type="checkbox" id="transparentBg" checked style="width: auto; cursor: pointer;" />
+          <label for="transparentBg" style="margin-bottom: 0; cursor: pointer; text-transform: none; letter-spacing: normal;">Transparent Background</label>
+        </div>
+
         <div class="preview-area">
           <svg id="barcode"></svg>
         </div>
@@ -295,12 +300,14 @@
     <script>
       const input = document.getElementById("barcodeValue");
       const typeSelect = document.getElementById("barcodeType");
+      const transparentBg = document.getElementById("transparentBg");
       const downloadBtn = document.getElementById("downloadBtn");
       const hiddenCanvas = document.getElementById("hiddenCanvas");
 
       function generate() {
         const value = input.value || " ";
         const format = typeSelect.value;
+        const isTransparent = transparentBg.checked;
 
         try {
           JsBarcode("#barcode", value, {
@@ -311,15 +318,18 @@
             displayValue: true,
             fontSize: 16,
             font: "JetBrains Mono",
-            background: "transparent",
+            background: isTransparent ? "transparent" : "#ffffff",
           });
+          document.getElementById("barcode").style.opacity = "1";
         } catch (e) {
           console.error("Barcode generation failed", e);
+          document.getElementById("barcode").style.opacity = "0.3";
         }
       }
 
       input.addEventListener("input", generate);
       typeSelect.addEventListener("change", generate);
+      transparentBg.addEventListener("change", generate);
 
       downloadBtn.addEventListener("click", () => {
         const svg = document.getElementById("barcode");
