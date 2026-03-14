@@ -246,6 +246,7 @@
             autocomplete="off"
             value="123456789"
           />
+          <p id="formatHint" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;"></p>
         </div>
 
         <div class="input-group">
@@ -266,8 +267,9 @@
           <label for="transparentBg" style="margin-bottom: 0; cursor: pointer; text-transform: none; letter-spacing: normal;">Transparent Background</label>
         </div>
 
-        <div class="preview-area">
+        <div class="preview-area" id="previewArea">
           <svg id="barcode"></svg>
+          <div id="errorMessage" style="display: none; color: #ef4444; font-weight: 600; text-align: center; padding: 1rem;">Invalid input for selected format</div>
         </div>
 
         <div class="actions">
@@ -304,10 +306,34 @@
       const downloadBtn = document.getElementById("downloadBtn");
       const hiddenCanvas = document.getElementById("hiddenCanvas");
 
+      const formatHints = {
+        CODE128: "Any ASCII character",
+        EAN13: "12 digits (plus 1 checksum digit)",
+        UPC: "11 digits (plus 1 checksum digit)",
+        CODE39: "Uppercase letters, numbers, and - . $ / + % [space]",
+        ITF14: "14 digits (only numbers)",
+        MSI: "Only numbers",
+        pharmacode: "Only numbers (3 to 131070)"
+      };
+
+      function updateHint() {
+        const format = typeSelect.value;
+        const hint = document.getElementById("formatHint");
+        hint.textContent = formatHints[format] || "";
+      }
+
       function generate() {
-        const value = input.value || " ";
+        const value = input.value || "";
         const format = typeSelect.value;
         const isTransparent = transparentBg.checked;
+        const errorEl = document.getElementById("errorMessage");
+        const svgEl = document.getElementById("barcode");
+
+        if (!value) {
+          svgEl.style.display = "none";
+          errorEl.style.display = "none";
+          return;
+        }
 
         try {
           JsBarcode("#barcode", value, {
@@ -320,15 +346,21 @@
             font: "JetBrains Mono",
             background: isTransparent ? "transparent" : "#ffffff",
           });
-          document.getElementById("barcode").style.opacity = "1";
+          svgEl.style.display = "block";
+          errorEl.style.display = "none";
+          svgEl.style.opacity = "1";
         } catch (e) {
           console.error("Barcode generation failed", e);
-          document.getElementById("barcode").style.opacity = "0.3";
+          svgEl.style.display = "none";
+          errorEl.style.display = "block";
         }
       }
 
       input.addEventListener("input", generate);
-      typeSelect.addEventListener("change", generate);
+      typeSelect.addEventListener("change", () => {
+        updateHint();
+        generate();
+      });
       transparentBg.addEventListener("change", generate);
 
       downloadBtn.addEventListener("click", () => {
@@ -354,8 +386,13 @@
 
           const pngUrl = canvas.toDataURL("image/png");
           const downloadLink = document.createElement("a");
+          
+          // Sanitize filename and ensure .png extension
+          let filename = input.value.replace(/[^a-z0-9]/gi, '_').toLowerCase() || "barcode";
+          if (!filename.endsWith(".png")) filename += ".png";
+          
           downloadLink.href = pngUrl;
-          downloadLink.download = `barcode-${input.value || "export"}.png`;
+          downloadLink.download = filename;
           document.body.appendChild(downloadLink);
           downloadLink.click();
           document.body.removeChild(downloadLink);
@@ -366,7 +403,10 @@
       });
 
       // Initial generation
-      window.addEventListener("load", generate);
+      window.addEventListener("load", () => {
+        updateHint();
+        generate();
+      });
     </script>
   </body>
 </html>
