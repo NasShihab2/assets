@@ -142,16 +142,7 @@
       }
 
       #logoOverlay {
-        position: absolute;
-        width: 20%;
-        height: 20%;
-        object-fit: contain;
         display: none;
-        pointer-events: none;
-        z-index: 10;
-        background: white;
-        padding: 4px;
-        border-radius: 8px;
       }
 
       .actions {
@@ -375,41 +366,79 @@ END:VCARD`;
         const content = getContent() || "AssetHub";
         const color = qrColorInput.value;
         const isTransparent = transparentBg.checked;
+        const hasLogo = !!logoOverlay.src && logoOverlay.style.display !== 'none';
 
         try {
-          // Use the global QRCode object safely
+          // 1. Generate QR Code on export canvas at high res
           await QRLib.toCanvas(exportCanvas, content, {
-            width: 800,
+            width: 1000,
             margin: 2,
             color: {
               dark: color,
               light: isTransparent ? "#00000000" : "#ffffff"
             },
-            errorCorrectionLevel: 'H'
+            // Force high error correction if we have a logo
+            errorCorrectionLevel: hasLogo ? 'H' : 'M'
           });
 
-          // Display in UI (smaller version)
+          const ctx = exportCanvas.getContext('2d');
+
+          // 2. Draw Logo on Export Canvas if exists
+          if (hasLogo) {
+            await drawLogoToCanvas(exportCanvas, logoOverlay.src);
+          }
+
+          // 3. Display in UI (smaller preview)
           const previewCanvas = document.createElement('canvas');
-          await QRLib.toCanvas(previewCanvas, content, {
-            width: 300,
-            margin: 2,
-            color: {
-              dark: color,
-              light: isTransparent ? "#00000000" : "#ffffff"
-            }
-          });
+          previewCanvas.width = 600;
+          previewCanvas.height = 600;
+          const pCtx = previewCanvas.getContext('2d');
+          pCtx.drawImage(exportCanvas, 0, 0, 600, 600);
           
           qrDiv.innerHTML = '';
           qrDiv.appendChild(previewCanvas);
 
-          // Handle Logo if present
-          if (logoOverlay.src && logoOverlay.style.display !== 'none') {
-            // Adjust logo visibility logic here if needed
-          }
-
         } catch (err) {
           console.error("QR Generation Error:", err);
         }
+      }
+
+      function drawLogoToCanvas(canvas, logoSrc) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.crossOrigin = "anonymous"; // Handle potential CORS
+          img.onload = () => {
+            const ctx = canvas.getContext('2d');
+            
+            // Standard QR size and module calculation
+            // Logo should generally not exceed 15-20% for reliability even with H correction
+            const logoSize = canvas.width * 0.18; 
+            const x = (canvas.width - logoSize) / 2;
+            const y = (canvas.height - logoSize) / 2;
+            
+            // Draw a SHARP "Quiet Zone" background for the logo
+            // This MUST be solid white to hide modules effectively
+            const padding = 12;
+            ctx.fillStyle = "#FFFFFF";
+            ctx.shadowBlur = 0; // Ensure no semi-transparent edges
+            
+            // Fill background
+            ctx.fillRect(x - padding, y - padding, logoSize + padding * 2, logoSize + padding * 2);
+            
+            // Optional: Subtle rounded border if desired, but keep it solid inside
+            ctx.strokeStyle = "rgba(0,0,0,0.1)";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x - padding, y - padding, logoSize + padding * 2, logoSize + padding * 2);
+            
+            ctx.drawImage(img, x, y, logoSize, logoSize);
+            resolve();
+          };
+          img.onerror = () => {
+            console.error("Failed to load logo image");
+            resolve();
+          };
+          img.src = logoSrc;
+        });
       }
 
       // Type Switcher
@@ -445,39 +474,17 @@ END:VCARD`;
 
       // Download
       downloadBtn.addEventListener('click', () => {
-        const ctx = exportCanvas.getContext('2d');
-        
-        if (logoOverlay.src && logoOverlay.style.display !== 'none') {
-          const img = new Image();
-          img.onload = () => {
-            const logoSize = exportCanvas.width * 0.2;
-            const x = (exportCanvas.width - logoSize) / 2;
-            const y = (exportCanvas.height - logoSize) / 2;
-            
-            // Draw background for logo to make it stand out
-            ctx.fillStyle = "white";
-            ctx.beginPath();
-            ctx.roundRect(x - 5, y - 5, logoSize + 10, logoSize + 10, 10);
-            ctx.fill();
-            
-            ctx.drawImage(img, x, y, logoSize, logoSize);
-            saveCanvas();
-          };
-          img.src = logoOverlay.src;
-        } else {
-          saveCanvas();
-        }
-
-        function saveCanvas() {
-          const link = document.createElement('a');
-          link.download = `qr_${Date.now()}.png`;
-          link.href = exportCanvas.toDataURL();
-          link.click();
-        }
+        const link = document.createElement('a');
+        link.download = `qr_${Date.now()}.png`;
+        link.href = exportCanvas.toDataURL();
+        link.click();
       });
 
       // Initial
-      window.addEventListener('load', generate);
+      window.addEventListener('load', () => {
+        // Delay slightly to ensure library is available
+        setTimeout(generate, 100);
+      });
     </script>
   </body>
 </html>
