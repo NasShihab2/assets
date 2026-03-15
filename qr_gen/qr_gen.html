@@ -651,6 +651,47 @@ END:VCARD`;
         return document.getElementById('textIn').value;
       }
 
+      // Crop canvas to tight content bounds (for margin=0 truly marginless)
+      function cropCanvasTight(src) {
+        const w = src.width, h = src.height;
+        const ctx = src.getContext('2d');
+        const data = ctx.getImageData(0, 0, w, h).data;
+
+        // Determine the "empty" color from the top-left pixel
+        const bgR = data[0], bgG = data[1], bgB = data[2];
+        const tol = 10; // tolerance for near-bg pixels
+
+        function isEmpty(x, y) {
+          const i = (y * w + x) * 4;
+          const a = data[i + 3];
+          if (a < 10) return true; // transparent
+          return Math.abs(data[i] - bgR) < tol &&
+                 Math.abs(data[i+1] - bgG) < tol &&
+                 Math.abs(data[i+2] - bgB) < tol;
+        }
+
+        let top = 0, bottom = h - 1, left = 0, right = w - 1;
+
+        outer: for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) if (!isEmpty(x, y)) { top = y; break outer; }
+        }
+        outer: for (let y = h - 1; y >= top; y--) {
+          for (let x = 0; x < w; x++) if (!isEmpty(x, y)) { bottom = y; break outer; }
+        }
+        outer: for (let x = 0; x < w; x++) {
+          for (let y = top; y <= bottom; y++) if (!isEmpty(x, y)) { left = x; break outer; }
+        }
+        outer: for (let x = w - 1; x >= left; x--) {
+          for (let y = top; y <= bottom; y++) if (!isEmpty(x, y)) { right = x; break outer; }
+        }
+
+        const cw = right - left + 1, ch = bottom - top + 1;
+        const out = document.createElement('canvas');
+        out.width = cw; out.height = ch;
+        out.getContext('2d').drawImage(src, left, top, cw, ch, 0, 0, cw, ch);
+        return out;
+      }
+
       async function generate() {
         const QRLib = window.QRCode;
         if (!QRLib) {
@@ -684,12 +725,22 @@ END:VCARD`;
             await drawLogoToCanvas(exportCanvas, logoDataUrl);
           }
 
-          // 3. Display in UI (smaller preview)
+          // 3. If margin is 0, crop to true content bounds (no quiet zone at all)
+          let finalCanvas = exportCanvas;
+          if (margin === 0) {
+            finalCanvas = cropCanvasTight(exportCanvas);
+            // Copy cropped result back into exportCanvas for download
+            exportCanvas.width = finalCanvas.width;
+            exportCanvas.height = finalCanvas.height;
+            exportCanvas.getContext('2d').drawImage(finalCanvas, 0, 0);
+          }
+
+          // 4. Display in UI (smaller preview)
           const previewCanvas = document.createElement('canvas');
           previewCanvas.width = 600;
           previewCanvas.height = 600;
           const pCtx = previewCanvas.getContext('2d');
-          pCtx.drawImage(exportCanvas, 0, 0, 600, 600);
+          pCtx.drawImage(finalCanvas, 0, 0, 600, 600);
           
           qrDiv.innerHTML = '';
           qrDiv.appendChild(previewCanvas);
