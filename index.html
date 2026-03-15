@@ -99,15 +99,33 @@
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      padding: 2rem 1.5rem;
+      padding: 1.5rem;
       flex-shrink: 0;
+      transition: width 0.3s ease, padding 0.3s ease;
+      position: relative;
+    }
+
+    aside.collapsed {
+      width: 80px;
+      padding: 1.5rem 0.75rem;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      overflow: hidden;
+    }
+
+    aside.collapsed .sidebar-header {
+      justify-content: center;
     }
 
     .logo {
       font-family: 'Outfit', sans-serif;
       font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 3rem;
       display: flex;
       align-items: center;
       gap: 0.75rem;
@@ -115,6 +133,43 @@
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
+      white-space: nowrap;
+      transition: opacity 0.3s ease;
+    }
+
+    aside.collapsed .logo span {
+      display: none;
+    }
+
+    .sidebar-toggle {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .sidebar-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      border-color: var(--accent);
+    }
+
+    aside.collapsed .sidebar-toggle {
+      position: absolute;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    aside.collapsed .logo {
+      margin-bottom: 4rem;
     }
 
     nav {
@@ -144,6 +199,15 @@
       background-color: rgba(56, 189, 248, 0.1);
       color: var(--accent);
       box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    aside.collapsed .nav-item {
+      justify-content: center;
+      padding: 0.75rem;
+    }
+
+    aside.collapsed .nav-item span {
+      display: none;
     }
 
     /* Main Content */
@@ -557,14 +621,24 @@
     </button>
   </header>
 
-  <aside>
-    <div class="logo">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="m3 21 1.9-1.9a8.6 8.6 0 1 0-1.1-1.1z" />
-        <circle cx="15" cy="9" r="2" />
-      </svg>
-      AssetHub
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 21 1.9-1.9a8.6 8.6 0 1 0-1.1-1.1z" />
+          <circle cx="15" cy="9" r="2" />
+        </svg>
+        <span>AssetHub</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
     </div>
 
     <nav>
@@ -576,7 +650,7 @@
           <rect width="7" height="7" x="14" y="14" rx="1" />
           <rect width="7" height="7" x="3" y="14" rx="1" />
         </svg>
-        All Assets
+        <span>All Assets</span>
       </div>
       <div class="nav-item" data-category="svg">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -585,7 +659,7 @@
           <polyline points="14 2 14 8 20 8" />
           <path d="m9 13 3 3 3-3" />
         </svg>
-        SVG Icons
+        <span>SVG Icons</span>
       </div>
       <div class="nav-item" data-category="lottie">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -595,7 +669,7 @@
           <path d="m3.3 7 8.7 5 8.7-5" />
           <path d="M12 22V12" />
         </svg>
-        Lottie Animations
+        <span>Lottie Animations</span>
       </div>
       <div class="nav-item" data-category="image">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -604,7 +678,7 @@
           <circle cx="9" cy="9" r="2" />
           <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
         </svg>
-        Images & GIFs
+        <span>Images & GIFs</span>
       </div>
       <div class="nav-item" data-category="font">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -613,7 +687,7 @@
           <path d="M9 20h6" />
           <path d="M12 4v16" />
         </svg>
-        Fonts
+        <span>Fonts</span>
       </div>
       <div class="nav-item" data-category="doc">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -624,7 +698,7 @@
           <line x1="16" y1="17" x2="8" y2="17" />
           <polyline points="10 9 9 9 8 9" />
         </svg>
-        Documents
+        <span>Documents</span>
       </div>
 
       <div class="nav-item" data-category="dart">
@@ -634,7 +708,7 @@
           <path d="M2 17l10 5 10-5" />
           <path d="M2 12l10 5 10-5" />
         </svg>
-        Dart
+        <span>Dart</span>
       </div>
 
       <a href="barcode_gen/barcode_gen.html" class="nav-item" style="text-decoration: none;">
@@ -646,7 +720,7 @@
           <line x1="17" y1="5" x2="17" y2="19" />
           <line x1="21" y1="5" x2="21" y2="19" />
         </svg>
-        Barcode Generate
+        <span>Barcode Generate</span>
       </a>
 
       <a href="qr_gen/qr_gen.html" class="nav-item" style="text-decoration: none;">
@@ -657,7 +731,7 @@
           <rect x="3" y="14" width="7" height="7" />
           <path d="M14 14h3v3h-3zM17 17h4v4h-4zM14 19h3v2h-3zM19 14h2v3h-2z" />
         </svg>
-        QR Generate
+        <span>QR Generate</span>
       </a>
 
     </nav>
@@ -1696,6 +1770,22 @@
         }
       });
     }
+
+    // Sidebar Toggle Logic
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+
+    // Load initial state
+    const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+    if (isCollapsed) {
+      sidebar.classList.add('collapsed');
+    }
+
+    sidebarToggleBtn.onclick = (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle('collapsed');
+      localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+    };
 
     // Initialize
     renderAssets();

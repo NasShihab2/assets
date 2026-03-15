@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@600;800&family=JetBrains+Mono&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@600;700;800&family=JetBrains+Mono&display=swap"
       rel="stylesheet"
     />
     <!-- QRCode.js Library (node-qrcode) - Local fallback -->
@@ -23,6 +23,11 @@
         --text-muted: #94a3b8;
         --glass-border: rgba(255, 255, 255, 0.1);
         --accent: #38bdf8;
+        --sidebar-bg: #0f172a;
+        --border: #334155;
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       * {
@@ -33,16 +38,148 @@
       }
 
       body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
         background-color: var(--bg);
+        color: var(--text);
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* Sidebar Styles (matching index.html) */
+      aside {
+        width: 280px;
+        background-color: var(--sidebar-bg);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+        flex-shrink: 0;
+        transition: width 0.3s ease, padding 0.3s ease;
+        position: relative;
+        z-index: 100;
+        text-align: left;
+      }
+
+      aside.collapsed {
+        width: 80px;
+        padding: 1.5rem 0.75rem;
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 3rem;
+        overflow: hidden;
+      }
+
+      aside.collapsed .sidebar-header {
+        justify-content: center;
+      }
+
+      .logo {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: linear-gradient(to right, #818cf8, #c084fc);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        white-space: nowrap;
+        transition: opacity 0.3s ease;
+      }
+
+      aside.collapsed .logo span {
+        display: none;
+      }
+
+      .sidebar-toggle {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+      }
+
+      .sidebar-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        border-color: var(--accent);
+      }
+
+      aside.collapsed .sidebar-toggle {
+        position: absolute;
+        top: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      aside.collapsed .logo {
+        margin-bottom: 4rem;
+      }
+
+      nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .nav-item {
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        text-decoration: none;
+      }
+
+      .nav-item:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--text-primary);
+      }
+
+      .nav-item.active {
+        background-color: rgba(56, 189, 248, 0.1);
+        color: var(--accent);
+        box-shadow: inset 0 0 0 1px var(--accent);
+      }
+
+      aside.collapsed .nav-item {
+        justify-content: center;
+        padding: 0.75rem;
+      }
+
+      aside.collapsed .nav-item span {
+        display: none;
+      }
+
+      /* Main Layout */
+      .page-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        padding: 4rem 2rem;
+        align-items: center;
         background-image:
           radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
           radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.15) 0px, transparent 50%);
-        color: var(--text);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 4rem 2rem;
       }
 
       .container {
@@ -67,8 +204,8 @@
         letter-spacing: -0.05em;
         margin-bottom: 0.5rem;
         background: linear-gradient(to right, #a78bfa, #38bdf8);
-        background-clip: text;
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
       }
 
@@ -222,7 +359,122 @@
     </style>
   </head>
   <body>
-    <div class="container">
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 21 1.9-1.9a8.6 8.6 0 1 0-1.1-1.1z" />
+            <circle cx="15" cy="9" r="2" />
+          </svg>
+          <span>AssetHub</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <nav>
+        <a href="../index.html" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="7" x="3" y="3" rx="1" />
+            <rect width="7" height="7" x="14" y="3" rx="1" />
+            <rect width="7" height="7" x="14" y="14" rx="1" />
+            <rect width="7" height="7" x="3" y="14" rx="1" />
+          </svg>
+          <span>All Assets</span>
+        </a>
+        <a href="../index.html?category=svg" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+            <polyline points="14 2 14 8 20 8" />
+            <path d="m9 13 3 3 3-3" />
+          </svg>
+          <span>SVG Icons</span>
+        </a>
+        <a href="../index.html?category=lottie" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+            <path d="m3.3 7 8.7 5 8.7-5" />
+            <path d="M12 22V12" />
+          </svg>
+          <span>Lottie Animations</span>
+        </a>
+        <a href="../index.html?category=image" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+            <circle cx="9" cy="9" r="2" />
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+          </svg>
+          <span>Images & GIFs</span>
+        </a>
+        <a href="../index.html?category=font" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7V4h16v3" />
+            <path d="M9 20h6" />
+            <path d="M12 4v16" />
+          </svg>
+          <span>Fonts</span>
+        </a>
+        <a href="../index.html?category=doc" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+          <span>Documents</span>
+        </a>
+        <a href="../index.html?category=dart" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="M2 17l10 5 10-5" />
+            <path d="M2 12l10 5 10-5" />
+          </svg>
+          <span>Dart</span>
+        </a>
+
+        <a href="../barcode_gen/barcode_gen.html" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="5" x2="3" y2="19" />
+            <line x1="8" y1="5" x2="8" y2="19" />
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="17" y1="5" x2="17" y2="19" />
+            <line x1="21" y1="5" x2="21" y2="19" />
+          </svg>
+          <span>Barcode Generate</span>
+        </a>
+
+        <a href="qr_gen.html" class="nav-item active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+            <path d="M14 14h3v3h-3zM17 17h4v4h-4zM14 19h3v2h-3zM19 14h2v3h-2z" />
+          </svg>
+          <span>QR Generate</span>
+        </a>
+      </nav>
+    </aside>
+
+    <div class="page-content">
+      <div class="container">
       <header>
         <h1>QR Gen</h1>
         <p style="color: var(--text-muted); font-size: 1.1rem;">Create premium branded QR codes</p>
@@ -480,6 +732,22 @@ END:VCARD`;
         link.click();
       });
 
+      // Sidebar Toggle Logic
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+  
+      // Load initial state
+      const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+      if (isCollapsed) {
+        sidebar.classList.add('collapsed');
+      }
+  
+      sidebarToggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('collapsed');
+        localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+      };
+
       // Initial
       window.addEventListener('load', () => {
         // Delay slightly to ensure library is available
@@ -488,3 +756,4 @@ END:VCARD`;
     </script>
   </body>
 </html>
+```
