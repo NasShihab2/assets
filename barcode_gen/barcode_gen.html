@@ -73,11 +73,11 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: 3rem;
-        overflow: visible;
       }
 
       aside.collapsed .sidebar-header {
         justify-content: center;
+        margin-bottom: 1.5rem;
       }
 
       .logo {
@@ -93,10 +93,9 @@
         -webkit-text-fill-color: transparent;
         white-space: nowrap;
         transition: opacity 0.3s ease;
-        overflow: hidden;
       }
 
-      aside.collapsed .logo span {
+      aside.collapsed .logo {
         display: none;
       }
 
@@ -121,14 +120,7 @@
       }
 
       aside.collapsed .sidebar-toggle {
-        position: absolute;
-        top: 1.5rem;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      aside.collapsed .logo {
-        margin-bottom: 4rem;
+        position: static;
       }
 
       nav {
