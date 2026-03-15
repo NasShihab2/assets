@@ -73,7 +73,7 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: 3rem;
-        overflow: hidden;
+        overflow: visible;
       }
 
       aside.collapsed .sidebar-header {
@@ -93,6 +93,7 @@
         -webkit-text-fill-color: transparent;
         white-space: nowrap;
         transition: opacity 0.3s ease;
+        overflow: hidden;
       }
 
       aside.collapsed .logo span {
@@ -279,7 +280,7 @@
       }
 
       #logoOverlay {
-        display: none;
+        display: none !important;
       }
 
       .actions {
@@ -618,7 +619,7 @@ END:VCARD`;
         const content = getContent() || "AssetHub";
         const color = qrColorInput.value;
         const isTransparent = transparentBg.checked;
-        const hasLogo = !!logoOverlay.src && logoOverlay.style.display !== 'none';
+        const hasLogo = !!logoDataUrl;
 
         try {
           // 1. Generate QR Code on export canvas at high res
@@ -637,7 +638,7 @@ END:VCARD`;
 
           // 2. Draw Logo on Export Canvas if exists
           if (hasLogo) {
-            await drawLogoToCanvas(exportCanvas, logoOverlay.src);
+            await drawLogoToCanvas(exportCanvas, logoDataUrl);
           }
 
           // 3. Display in UI (smaller preview)
@@ -658,31 +659,38 @@ END:VCARD`;
       function drawLogoToCanvas(canvas, logoSrc) {
         return new Promise((resolve) => {
           const img = new Image();
-          img.crossOrigin = "anonymous"; // Handle potential CORS
+          img.crossOrigin = "anonymous";
           img.onload = () => {
             const ctx = canvas.getContext('2d');
-            
-            // Standard QR size and module calculation
-            // Logo should generally not exceed 15-20% for reliability even with H correction
-            const logoSize = canvas.width * 0.18; 
-            const x = (canvas.width - logoSize) / 2;
-            const y = (canvas.height - logoSize) / 2;
-            
-            // Draw a SHARP "Quiet Zone" background for the logo
-            // This MUST be solid white to hide modules effectively
+
+            // Max container size: 18% of canvas width
+            const maxSize = canvas.width * 0.18;
+
+            // Preserve aspect ratio (object-fit: contain)
+            const ratio = img.naturalWidth / img.naturalHeight;
+            let drawW, drawH;
+            if (ratio >= 1) {
+              drawW = maxSize;
+              drawH = maxSize / ratio;
+            } else {
+              drawH = maxSize;
+              drawW = maxSize * ratio;
+            }
+
+            const x = (canvas.width - drawW) / 2;
+            const y = (canvas.height - drawH) / 2;
+
+            // White quiet-zone background
             const padding = 12;
             ctx.fillStyle = "#FFFFFF";
-            ctx.shadowBlur = 0; // Ensure no semi-transparent edges
-            
-            // Fill background
-            ctx.fillRect(x - padding, y - padding, logoSize + padding * 2, logoSize + padding * 2);
-            
-            // Optional: Subtle rounded border if desired, but keep it solid inside
+            ctx.shadowBlur = 0;
+            ctx.fillRect(x - padding, y - padding, drawW + padding * 2, drawH + padding * 2);
+
             ctx.strokeStyle = "rgba(0,0,0,0.1)";
             ctx.lineWidth = 1;
-            ctx.strokeRect(x - padding, y - padding, logoSize + padding * 2, logoSize + padding * 2);
-            
-            ctx.drawImage(img, x, y, logoSize, logoSize);
+            ctx.strokeRect(x - padding, y - padding, drawW + padding * 2, drawH + padding * 2);
+
+            ctx.drawImage(img, x, y, drawW, drawH);
             resolve();
           };
           img.onerror = () => {
@@ -700,20 +708,21 @@ END:VCARD`;
         generate();
       });
 
-      // Logo Handling
+      // Logo Handling — store logo data in a variable, never show the img element
+      let logoDataUrl = null;
       logoIn.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
           const reader = new FileReader();
           reader.onload = (re) => {
-            logoOverlay.src = re.target.result;
-            logoOverlay.style.display = 'block';
+            logoDataUrl = re.target.result;
+            logoOverlay.src = logoDataUrl; // keep src for hasLogo check
             generate();
           };
           reader.readAsDataURL(file);
         } else {
+          logoDataUrl = null;
           logoOverlay.src = '';
-          logoOverlay.style.display = 'none';
           generate();
         }
       });
