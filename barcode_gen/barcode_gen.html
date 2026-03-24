@@ -255,8 +255,13 @@
         box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
       }
 
+      #barcode {
+        height: auto;
+        display: block;
+      }
+
       .preview-area {
-        background: white;
+        background: #ffffff;
         border-radius: 16px;
         padding: 2rem;
         display: flex;
@@ -265,17 +270,9 @@
         min-height: 200px;
         margin-bottom: 2rem;
         position: relative;
-        overflow: hidden;
+        overflow-x: auto;
         transition: transform 0.3s ease;
-      }
-
-      .preview-area:hover {
-        transform: scale(1.02);
-      }
-
-      #barcode {
-        max-width: 100%;
-        height: auto;
+        border: 1px solid var(--border);
       }
 
       .actions {
@@ -597,17 +594,26 @@
             width: 2,
             height: 100,
             displayValue: showText,
-            fontSize: 16,
+            fontSize: 18,
             font: "JetBrains Mono",
             background: isTransparent ? "transparent" : "#ffffff",
+            valid: function(valid) {
+              if (valid) {
+                svgEl.style.display = "block";
+                errorEl.style.display = "none";
+                svgEl.style.opacity = "1";
+              } else {
+                svgEl.style.display = "none";
+                errorEl.style.display = "block";
+                errorEl.textContent = `Invalid input for ${format}`;
+              }
+            }
           });
-          svgEl.style.display = "block";
-          errorEl.style.display = "none";
-          svgEl.style.opacity = "1";
         } catch (e) {
           console.error("Barcode generation failed", e);
           svgEl.style.display = "none";
           errorEl.style.display = "block";
+          errorEl.textContent = "Generation failed. Check console for details.";
         }
       }
 
